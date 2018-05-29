@@ -4,12 +4,14 @@
 
 <p>Add a new Post:</p>
 
-<form action="/posts/new" method="POST">
-    <label for="content">Post Description</label>
-    <input id="content" name="content" type="text">
-
-    <button type="submit" class="btn btn-default">Add post</button>
-</form>
+{{#if posts}}
+    {{#each posts }}
+        <p>Current post:</p>
+        <p>{{ content }} <a href="/posts/{{id}}">read more...</a></p>
+    {{/each}}
+{{else}}
+    <p>No posts!</p>
+{{/if}}
 {{/partial}}
 
 {{> layout.hbs}}

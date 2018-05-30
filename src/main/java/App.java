@@ -14,7 +14,7 @@ public class App {
 
         get("/posts/new", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
-            return new ModelAndView(model, "newpost-form.hbs");
+            return new ModelAndView(model, "post-form.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/posts/new", (request, response) -> {
@@ -32,6 +32,12 @@ public class App {
             return new ModelAndView(model, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
+        get("/posts/delete", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            Post.clearAllPosts();
+            return new ModelAndView(model, "success.hbs");
+        }, new HandlebarsTemplateEngine());
+
         get("/posts/:id", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
             int idOfPostToFind = Integer.parseInt(req.params("id")); //pull id - must match route segment
@@ -40,6 +46,33 @@ public class App {
             return new ModelAndView(model, "post-detail.hbs"); //individual post page.
         }, new HandlebarsTemplateEngine());
 
+        get("/posts/:id/update", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            int idOfPostToEdit = Integer.parseInt(req.params("id"));
+            Post editPost = Post.findById(idOfPostToEdit);
+            model.put("editPost", editPost);
+            return new ModelAndView(model, "post-form.hbs");
+        }, new HandlebarsTemplateEngine());
 
+        post("/posts/:id/update", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            int idOfPostToEdit = Integer.parseInt(req.params("id"));
+            String newContent = req.queryParams("content");
+            Post editPost = Post.findById(idOfPostToEdit);
+            editPost.update(newContent);
+            model.put("post", editPost);
+            return new ModelAndView(model, "success.hbs");
+        }, new HandlebarsTemplateEngine());
+
+
+        get("/posts/:id/delete", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            int idOfPostToDelete = Integer.parseInt(req.params("id")); //pull id - must match route segment
+            Post deletePost = Post.findById(idOfPostToDelete); //use it to find post
+            deletePost.deletePost();
+            return new ModelAndView(model, "success.hbs");
+        }, new HandlebarsTemplateEngine());
     }
+
+
 }

@@ -12,10 +12,10 @@ public class Post {
 
     public Post (String content){
         this.content = content;
-       this.published = false;
-       this.createdAt = LocalDateTime.now();
-       instances.add(this);
-       this.id = instances.size();
+        this.published = false;
+        this.createdAt = LocalDateTime.now();
+        instances.add(this);
+        this.id = instances.size();
     }
 
     public String getContent() {
@@ -44,6 +44,20 @@ public class Post {
     }
 
     public static Post findById(int id) {
-        return instances.get(id-1);
+        return instances.get(id - 1);
+    }
+
+
+    public void update(String newContent) {
+        this.content = newContent;
+    }
+
+    public static void delete(int searchDeleteId) {
+        instances.remove(searchDeleteId - 1 );
+
+    }
+
+    public void deletePost() {
+        instances.remove(id-1);
     }
 }
